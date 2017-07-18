@@ -64,6 +64,22 @@ void	ft_clrscreen(int rows)
 **
 */
 
+void		logo(void)
+{
+	ft_putstr("╔═══╦════╗─╔═══╦═══╦╗──╔═══╦═══╦════╗\n");
+	ft_putstr("║╔══╣╔╗╔╗║─║╔═╗║╔══╣║──║╔══╣╔═╗║╔╗╔╗║\n");
+	ft_putstr("║╚══╬╝║║╚╝─║╚══╣╚══╣║──║╚══╣║─╚╩╝║║╚╝\n");
+	ft_putstr("║╔══╝─║║───╚══╗║╔══╣║─╔╣╔══╣║─╔╗─║║\n");
+	ft_putstr("║║────║║───║╚═╝║╚══╣╚═╝║╚══╣╚═╝║─║║\n");
+	ft_putstr("╚╝────╚╝═══╚═══╩═══╩═══╩═══╩═══╝─╚╝\n");
+}
+
+/*
+**
+** ---------------------------------------------------------------------------
+**
+*/
+
 void		print_scren(t_var *x)
 {
 	int		i;
@@ -75,6 +91,7 @@ void		print_scren(t_var *x)
 	i = -1;
 	ft_clrscreen(x->y);
 	ft_cursor_goto(0, 0);
+	logo();
 	while (x->objects[++i])
 	{
 			if (i == x->cursor)
@@ -84,8 +101,7 @@ void		print_scren(t_var *x)
 			ft_putstr_fd(x->objects[i], 2);
 			mode_str("ue");
 			mode_str("se");
-			// ft_putcharn_fd(' ',x->arg_width - (int)ft_strlen(x->objects[i]) + 3 ,2);
-			printf("\n");
+			write(1, "\n", 1);
 	}
 }
 
@@ -160,14 +176,14 @@ int				set_stage(t_var *x)
 
 void		key_up_down(t_var *x, long key)
 {
-	if (key == KEY_DOWN)
+	if (key == KEY_ABJ)
 	{
 		if (x->cursor == (x->arg_height - 1))
 			x->cursor = 0;
 		else if (x->cursor < x->arg_height)
 			x->cursor += 1;
 	}
-	else if (key == KEY_UP)
+	else if (key == KEY_ARR)
 	{
 		if (x->cursor == 0)
 			x->cursor = (x->arg_height - 1);
@@ -175,6 +191,12 @@ void		key_up_down(t_var *x, long key)
 			x->cursor -= 1;
 	}
 }
+
+/*
+**
+** ---------------------------------------------------------------------------
+**
+*/
 
 void		key_space(t_var *x, long key)
 {
@@ -188,8 +210,14 @@ void		key_space(t_var *x, long key)
 		x->select[x->cursor] = 0;
 		x->total_selected -= 1;
 	}
-	key_up_down(x, KEY_DOWN);
+	key_up_down(x, KEY_ABJ);
 }
+
+/*
+**
+** ---------------------------------------------------------------------------
+**
+*/
 
 void		return_values(t_var *x)
 {
@@ -214,6 +242,12 @@ void		return_values(t_var *x)
 	exit (EXIT_SUCCESS);
 }
 
+/*
+**
+** ---------------------------------------------------------------------------
+**
+*/
+
 void		read_key(t_var *x)
 {
 	long	key;
@@ -225,12 +259,12 @@ void		read_key(t_var *x)
 		refresh = 1;
 		if (key == KEY_BSP || key == KEY_DEL)
 			printf("del\n");
-		else if (key == KEY_UP || key == KEY_DOWN ||
-				key == KEY_LEFT || key == KEY_RIGHT)
+		else if (key == KEY_ARR || key == KEY_ABJ ||
+				key == KEY_IZQ || key == KEY_DER)
 			key_up_down(x, key);
 		else if (key == KEY_SPC)
 			key_space(x, key);
-		else if (key == KEY_ENTER)
+		else if (key == KEY_DAR)
 			return_values(x);
 		else if (key == KEY_STAR || key == KEY_MINUS)
 			printf("minus\n");
@@ -242,6 +276,7 @@ void		read_key(t_var *x)
 		key = 0;
 	}
 }
+
 /*
 **
 ** ---------------------------------------------------------------------------
