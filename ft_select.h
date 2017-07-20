@@ -44,9 +44,12 @@ typedef	struct			s_var
 	int					y;
 	int					len;
 	int					full;
+	int					width;
+	int					height;
 	int					cursor;
-	int					arg_height;
+	int					num_obj;
 	int					arg_width;
+	int					arg_height;
 	int					total_selected;
 	int					*select;
 	char				buffer[2048];

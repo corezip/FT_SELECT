@@ -18,6 +18,43 @@
 **
 */
 
+t_var	*saved_env(t_var *env)
+{
+	static t_var *setenv;
+
+	if (env)
+	{
+		setenv = env;
+		return (setenv);
+	}
+	else
+		return (setenv);
+}
+
+
+/*
+**
+** ---------------------------------------------------------------------------
+**
+*/
+
+void			size_term(t_var *x)
+{
+	struct winsize	win;
+
+	ioctl(0, TIOCGWINSZ, &win);
+	x->width = win.ws_col;
+	x->height = win.ws_row;
+	printf("X terminal: %d\n", x->width);
+	printf("Y terminal: %d\n", x->height);
+}
+
+/*
+**
+** ---------------------------------------------------------------------------
+**
+*/
+
 void	ft_cursor_goto(int x, int y)
 {
 	char *str1;
@@ -64,14 +101,16 @@ void	ft_clrscreen(int rows)
 **
 */
 
-void		logo(void)
+void		logo(t_var *x)
 {
-	ft_putstr("╔═══╦════╗─╔═══╦═══╦╗──╔═══╦═══╦════╗\n");
-	ft_putstr("║╔══╣╔╗╔╗║─║╔═╗║╔══╣║──║╔══╣╔═╗║╔╗╔╗║\n");
-	ft_putstr("║╚══╬╝║║╚╝─║╚══╣╚══╣║──║╚══╣║─╚╩╝║║╚╝\n");
-	ft_putstr("║╔══╝─║║───╚══╗║╔══╣║─╔╣╔══╣║─╔╗─║║\n");
-	ft_putstr("║║────║║───║╚═╝║╚══╣╚═╝║╚══╣╚═╝║─║║\n");
-	ft_putstr("╚╝────╚╝═══╚═══╩═══╩═══╩═══╩═══╝─╚╝\n");
+	x->num_obj = -1;
+	while (x->objects[++x->num_obj]);
+	if (x->width > 47 && x->height > x->num_obj + 5)
+	{
+		ft_putstr("▒█▀▀▀ ▀▀█▀▀ ▒█▀▀▀█ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▀▀█▀▀\n");
+		ft_putstr("▒█▀▀▀ ░▒█░░ ░▀▀▀▄▄ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█░░░ ░▒█░░\n");
+		ft_putstr("▒█░░░ ░▒█░░ ▒█▄▄▄█ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄ ▒█▄▄█ ░▒█░░\n\n\n");
+	}
 }
 
 /*
@@ -80,7 +119,7 @@ void		logo(void)
 **
 */
 
-void		print_scren(t_var *x)
+void		print_screen(t_var *x)
 {
 	int		i;
 	int		col;
@@ -91,17 +130,18 @@ void		print_scren(t_var *x)
 	i = -1;
 	ft_clrscreen(x->y);
 	ft_cursor_goto(0, 0);
-	logo();
+	size_term(x);
+	logo(x);
 	while (x->objects[++i])
 	{
-			if (i == x->cursor)
-				mode_str("us");
-			if (x->select[i] == 1)
-				mode_str("so");
-			ft_putstr_fd(x->objects[i], 2);
-			mode_str("ue");
-			mode_str("se");
-			write(1, "\n", 1);
+		if (i == x->cursor)
+			mode_str("us");
+		if (x->select[i] == 1)
+			mode_str("so");
+		ft_putstr_fd(x->objects[i], 2);
+		mode_str("ue");
+		mode_str("se");
+		write(1, "\n", 1);
 	}
 }
 
@@ -150,7 +190,6 @@ void			init_var(t_var *x, int ac, char **ar)
 ** ---------------------------------------------------------------------------
 **
 */
-
 int				set_stage(t_var *x)
 {
 	if (tgetent(x->buffer, getenv("TERM")) < 1)
@@ -272,9 +311,38 @@ void		read_key(t_var *x)
 			exit(0);
 		else
 			refresh = 0;
-		(refresh) ? print_scren(x) : 0;
+		(refresh) ? print_screen(x) : 0;
 		key = 0;
 	}
+}
+
+void	set_signals(void)
+{
+	// signal(SIGHUP, safe_exit);
+	// signal(SIGINT, safe_exit);
+	// signal(SIGQUIT, safe_exit);
+	// signal(SIGILL, safe_exit);
+	// signal(SIGTRAP, safe_exit);
+	// signal(SIGABRT, safe_exit);
+	// signal(SIGEMT, safe_exit);
+	// signal(SIGFPE, safe_exit);
+	// signal(SIGBUS, safe_exit);
+	// signal(SIGSEGV, safe_exit);
+	// signal(SIGSYS, safe_exit);
+	// signal(SIGPIPE, safe_exit);
+	// signal(SIGALRM, safe_exit);
+	// signal(SIGTERM, safe_exit);
+	// signal(SIGTTIN, safe_exit);
+	// signal(SIGTTOU, safe_exit);
+	// signal(SIGXCPU, safe_exit);
+	// signal(SIGXFSZ, safe_exit);
+	// signal(SIGVTALRM, safe_exit);
+	// signal(SIGPROF, safe_exit);
+	// signal(SIGUSR1, safe_exit);
+	// signal(SIGUSR2, safe_exit);
+	// signal(SIGTSTP, suspend_term);
+	// signal(SIGCONT, continue_term);
+	signal(SIGWINCH, print_screen);
 }
 
 /*
@@ -294,8 +362,10 @@ int				main(int ac, char **ar)
 		x = (t_var*)malloc(sizeof(t_var));
 		if (!set_stage(x))
 			printf("Vamos mal\n");
+		set_signals();
 		init_var(x, ac, ar);
-		print_scren(x);
+		// while (1)
+			print_screen(x);
 		read_key(x);
 	}
 	return (0);
