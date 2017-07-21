@@ -44,6 +44,7 @@ typedef	struct			s_var
 	int					y;
 	int					len;
 	int					full;
+	int					largo;
 	int					width;
 	int					height;
 	int					cursor;
@@ -55,6 +56,21 @@ typedef	struct			s_var
 	char				buffer[2048];
 	char				**objects;
 }						t_var;
+
+int						max_width(char **mtx);
+t_var					*saved_env(t_var *env);
+t_var					*safe_t_var(t_var *x, int flag);
+void					logo(t_var *x);
+void					read_key(t_var *x);
+void					size_term(t_var *x);
+void					mode_str(char *str);
+void					ft_clrscreen(int rows);
+void					return_values(t_var *x);
+void					print_screen_se(int sig);
+void					ft_cursor_goto(int x, int y);
+void					key_space(t_var *x, long key);
+void					print_objects(t_var *x, int i);
+void					len_obj(char **matrix, int i, t_var *x);
 
 #endif
 
