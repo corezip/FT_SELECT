@@ -45,16 +45,41 @@ void		key_up_down(t_var *x, long key)
 void		key_space(t_var *x, long key)
 {
 	if (x->select[x->cursor] == 0)
-		{
-			x->select[x->cursor] = 1;
-			x->total_selected += 1;
-		}
+	{
+		x->select[x->cursor] = 1;
+		x->total_selected += 1;
+	}
 	else
 	{
 		x->select[x->cursor] = 0;
 		x->total_selected -= 1;
 	}
 	key_up_down(x, KEY_ABJ);
+}
+
+/*
+**
+** ---------------------------------------------------------------------------
+**
+*/
+
+void		del_opt(t_var *x)
+{
+	int		i;
+
+	i = -1;
+	while (x->select[++i] == 0)
+		;
+	if (x->select[i] == 1)
+		{
+			x->select[x->cursor] = 0;
+			x->total_selected -= 1;
+		}
+	else
+	{
+		ft_clrscreen(x->x);
+		exit(0);
+	}
 }
 
 /*
@@ -83,7 +108,7 @@ void		return_values(t_var *x)
 		}
 	}
 	ft_memdel((void**)&x->select);
-	exit (EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
 
 /*
@@ -102,7 +127,7 @@ void		read_key(t_var *x)
 	{
 		refresh = 1;
 		if (key == KEY_BSP || key == KEY_DEL)
-			printf("del\n");
+			del_opt(x);
 		else if (key == KEY_ARR || key == KEY_ABJ ||
 				key == KEY_IZQ || key == KEY_DER)
 			key_up_down(x, key);

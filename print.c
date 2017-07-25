@@ -16,14 +16,15 @@
 **
 ** ---------------------------------------------------------------------------
 **
-*/	
+*/
 
 void		logo(t_var *x)
 {
-	int len;
+	int		len;
 
 	x->num_obj = -1;
-	while (x->objects[++x->num_obj]);
+	while (x->objects[++x->num_obj])
+		;
 	if (x->width > 47 && x->height > x->num_obj + 5)
 	{
 		ft_putstr("▒█▀▀▀ ▀▀█▀▀ ▒█▀▀▀█ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▀▀█▀▀\n");
@@ -46,7 +47,7 @@ void		print_objects(t_var *x, int i)
 		if (i == x->cursor)
 			mode_str("us");
 		if (x->select[i] == 1)
-		mode_str("so");
+			mode_str("so");
 		ft_putstr_fd(x->objects[i], 2);
 		mode_str("ue");
 		mode_str("se");
@@ -76,5 +77,5 @@ void		print_screen_se(int sig)
 	if (x->largo < x->width)
 		print_objects(x, -1);
 	else
-		ft_putstr("MORE SIZE!!!");
+		ft_putstr("Houston we have a problem");
 }

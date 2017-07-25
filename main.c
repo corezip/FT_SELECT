@@ -35,6 +35,7 @@ void			init_var(t_var *x, int ac, char **ar)
 ** ---------------------------------------------------------------------------
 **
 */
+
 int				set_stage(t_var *x)
 {
 	if (tgetent(x->buffer, getenv("TERM")) < 1)
@@ -58,32 +59,35 @@ int				set_stage(t_var *x)
 **
 */
 
-void	set_signals(void)
+/*
+	** signal(SIGHUP, safe_exit);
+	** signal(SIGINT, safe_exit);
+	** signal(SIGQUIT, safe_exit);
+	** signal(SIGILL, safe_exit);
+	** signal(SIGTRAP, safe_exit);
+	** signal(SIGABRT, safe_exit);
+	** signal(SIGEMT, safe_exit);
+	** signal(SIGFPE, safe_exit);
+	** signal(SIGBUS, safe_exit);
+	** signal(SIGSEGV, safe_exit);
+	** signal(SIGSYS, safe_exit);
+	** signal(SIGPIPE, safe_exit);
+	** signal(SIGALRM, safe_exit);
+	** signal(SIGTERM, safe_exit);
+	** signal(SIGTTIN, safe_exit);
+	** signal(SIGTTOU, safe_exit);
+	** signal(SIGXCPU, safe_exit);
+	** signal(SIGXFSZ, safe_exit);
+	** signal(SIGVTALRM, safe_exit);
+	** signal(SIGPROF, safe_exit);
+	** signal(SIGUSR1, safe_exit);
+	** signal(SIGUSR2, safe_exit);
+	** signal(SIGTSTP, suspend_term);
+	** signal(SIGCONT, continue_term);
+	*/
+
+void			set_signals(void)
 {
-	// signal(SIGHUP, safe_exit);
-	// signal(SIGINT, safe_exit);
-	// signal(SIGQUIT, safe_exit);
-	// signal(SIGILL, safe_exit);
-	// signal(SIGTRAP, safe_exit);
-	// signal(SIGABRT, safe_exit);
-	// signal(SIGEMT, safe_exit);
-	// signal(SIGFPE, safe_exit);
-	// signal(SIGBUS, safe_exit);
-	// signal(SIGSEGV, safe_exit);
-	// signal(SIGSYS, safe_exit);
-	// signal(SIGPIPE, safe_exit);
-	// signal(SIGALRM, safe_exit);
-	// signal(SIGTERM, safe_exit);
-	// signal(SIGTTIN, safe_exit);
-	// signal(SIGTTOU, safe_exit);
-	// signal(SIGXCPU, safe_exit);
-	// signal(SIGXFSZ, safe_exit);
-	// signal(SIGVTALRM, safe_exit);
-	// signal(SIGPROF, safe_exit);
-	// signal(SIGUSR1, safe_exit);
-	// signal(SIGUSR2, safe_exit);
-	// signal(SIGTSTP, suspend_term);
-	// signal(SIGCONT, continue_term);
 	signal(SIGWINCH, print_screen_se);
 }
 

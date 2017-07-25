@@ -18,7 +18,7 @@
 **
 */
 
-void			size_term(t_var *x)
+void				size_term(t_var *x)
 {
 	struct winsize	win;
 
@@ -35,9 +35,9 @@ void			size_term(t_var *x)
 **
 */
 
-void		len_obj(char **matrix, int i, t_var *x)
+void				len_obj(char **matrix, int i, t_var *x)
 {
-	int		tmp;
+	int				tmp;
 
 	x->largo = 0;
 	tmp = 0;
@@ -55,11 +55,11 @@ void		len_obj(char **matrix, int i, t_var *x)
 **
 */
 
-int			max_width(char **mtx)
+int						max_width(char **mtx)
 {
-	int		max;
-	int		i;
-	int		tmp;
+	int					max;
+	int					i;
+	int					tmp;
 
 	max = 0;
 	i = -1;

@@ -18,9 +18,9 @@
 **
 */
 
-t_var	*saved_env(t_var *env)
+t_var				*saved_env(t_var *env)
 {
-	static t_var *setenv;
+	static t_var	*setenv;
 
 	if (env)
 	{
@@ -42,9 +42,9 @@ t_var	*saved_env(t_var *env)
 */
 
 
-t_var			*safe_t_var(t_var *x, int flag)
+t_var				*safe_t_var(t_var *x, int flag)
 {
-	static t_var *tmp;
+	static t_var	*tmp;
 
 	if (flag == 0)
 	{

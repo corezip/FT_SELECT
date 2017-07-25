@@ -61,6 +61,7 @@ int						max_width(char **mtx);
 t_var					*saved_env(t_var *env);
 t_var					*safe_t_var(t_var *x, int flag);
 void					logo(t_var *x);
+void					del_opt(t_var *x);
 void					read_key(t_var *x);
 void					size_term(t_var *x);
 void					mode_str(char *str);
