@@ -25,8 +25,8 @@ void				size_term(t_var *x)
 	ioctl(0, TIOCGWINSZ, &win);
 	x->width = win.ws_col;
 	x->height = win.ws_row;
-	printf("X terminal: %d\n", x->width);
-	printf("Y terminal: %d\n", x->height);
+	x->col = x->height - 5;
+	x->x_nums = (x->width / x->col);
 }
 
 /*

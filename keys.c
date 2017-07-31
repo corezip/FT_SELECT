@@ -95,7 +95,8 @@ void		return_values(t_var *x)
 
 	cont = 0;
 	i = -1;
-	ft_clrscreen(x->x);
+	ft_clrscreen(x->y);
+	mode_str("te");
 	mode_str("ve");
 	while (x->objects[++i])
 	{
@@ -138,7 +139,7 @@ void		read_key(t_var *x)
 		else if (key == KEY_STAR || key == KEY_MINUS)
 			printf("minus\n");
 		else if (key == KEY_ESC)
-			exit(0);
+			safe_exit(0);
 		else
 			refresh = 0;
 		(refresh) ? print_screen_se(1) : 0;

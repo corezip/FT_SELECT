@@ -20,6 +20,9 @@
 
 void			init_var(t_var *x, int ac, char **ar)
 {
+	int		i;
+	int		tmp;
+
 	x->len = 0;
 	x->full = 0;
 	x->cursor = 0;
@@ -28,6 +31,11 @@ void			init_var(t_var *x, int ac, char **ar)
 	x->objects = ar + 1;
 	x->arg_width = max_width(x->objects);
 	x->select = (int *)ft_memalloc(sizeof(int) * x->arg_height);
+	i = -1;
+	while (x->objects[++i])
+		if ((tmp = ft_strlen(x->objects[i])) > x->len)
+			x->len = tmp;
+	x->total = i;
 }
 
 /*
@@ -49,7 +57,7 @@ int				set_stage(t_var *x)
 	x->y = tgetnum("li");
 	x->x = tgetnum("co");
 	mode_str("ti");
-	mode_str("ve");
+	mode_str("vi");
 	return (1);
 }
 
@@ -59,35 +67,32 @@ int				set_stage(t_var *x)
 **
 */
 
-/*
-	** signal(SIGHUP, safe_exit);
-	** signal(SIGINT, safe_exit);
-	** signal(SIGQUIT, safe_exit);
-	** signal(SIGILL, safe_exit);
-	** signal(SIGTRAP, safe_exit);
-	** signal(SIGABRT, safe_exit);
-	** signal(SIGEMT, safe_exit);
-	** signal(SIGFPE, safe_exit);
-	** signal(SIGBUS, safe_exit);
-	** signal(SIGSEGV, safe_exit);
-	** signal(SIGSYS, safe_exit);
-	** signal(SIGPIPE, safe_exit);
-	** signal(SIGALRM, safe_exit);
-	** signal(SIGTERM, safe_exit);
-	** signal(SIGTTIN, safe_exit);
-	** signal(SIGTTOU, safe_exit);
-	** signal(SIGXCPU, safe_exit);
-	** signal(SIGXFSZ, safe_exit);
-	** signal(SIGVTALRM, safe_exit);
-	** signal(SIGPROF, safe_exit);
-	** signal(SIGUSR1, safe_exit);
-	** signal(SIGUSR2, safe_exit);
-	** signal(SIGTSTP, suspend_term);
-	** signal(SIGCONT, continue_term);
-	*/
-
 void			set_signals(void)
 {
+	signal(SIGHUP, safe_exit);
+	signal(SIGINT, safe_exit);
+	signal(SIGQUIT, safe_exit);
+	signal(SIGILL, safe_exit);
+	signal(SIGTRAP, safe_exit);
+	signal(SIGABRT, safe_exit);
+	signal(SIGEMT, safe_exit);
+	signal(SIGFPE, safe_exit);
+	signal(SIGBUS, safe_exit);
+	signal(SIGSEGV, safe_exit);
+	signal(SIGSYS, safe_exit);
+	signal(SIGPIPE, safe_exit);
+	signal(SIGALRM, safe_exit);
+	signal(SIGTERM, safe_exit);
+	signal(SIGTTIN, safe_exit);
+	signal(SIGTTOU, safe_exit);
+	signal(SIGXCPU, safe_exit);
+	signal(SIGXFSZ, safe_exit);
+	signal(SIGVTALRM, safe_exit);
+	signal(SIGPROF, safe_exit);
+	signal(SIGUSR1, safe_exit);
+	signal(SIGUSR2, safe_exit);
+	signal(SIGTSTP, suspend_term);
+	signal(SIGCONT, continue_term);
 	signal(SIGWINCH, print_screen_se);
 }
 
@@ -109,6 +114,8 @@ int				main(int ac, char **ar)
 		if (!set_stage(x))
 			printf("Vamos mal\n");
 		set_signals();
+		x->ar = ar;
+		x->ac = ac;
 		init_var(x, ac, ar);
 		safe_t_var(x, 0);
 		print_screen_se(1);
