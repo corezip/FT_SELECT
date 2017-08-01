@@ -41,7 +41,6 @@ t_var				*saved_env(t_var *env)
 ** Flag > 0 recupera la estructura.
 */
 
-
 t_var				*safe_t_var(t_var *x, int flag)
 {
 	static t_var	*tmp;
@@ -52,5 +51,5 @@ t_var				*safe_t_var(t_var *x, int flag)
 		return (tmp);
 	}
 	else
-		return(tmp);
+		return (tmp);
 }

@@ -71,10 +71,10 @@ void		del_opt(t_var *x)
 	while (x->select[++i] == 0)
 		;
 	if (x->select[i] == 1)
-		{
-			x->select[x->cursor] = 0;
-			x->total_selected -= 1;
-		}
+	{
+		x->select[x->cursor] = 0;
+		x->total_selected -= 1;
+	}
 	else
 	{
 		ft_clrscreen(x->x);

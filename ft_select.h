@@ -36,7 +36,6 @@
 # define KEY_ABJ		4348699
 # define KEY_DEL		2117294875L
 
-
 typedef	struct			s_var
 {
 	struct termios		term;
@@ -47,11 +46,12 @@ typedef	struct			s_var
 	int					full;
 	int					largo;
 	int					cursor;
+	int					*select;
+	int					current;
 	int					num_obj;
 	int					arg_width;
 	int					arg_height;
 	int					total_selected;
-	int					*select;
 	char				**ar;
 	char				**objects;
 	char				buffer[2048];
@@ -65,6 +65,7 @@ typedef	struct			s_var
 int						set_stage(t_var *x);
 int						max_width(char **mtx);
 int						len_print(int len, char **obj, t_var *x);
+int						print_objects_2(t_var *x, int *row, int *col);
 t_var					*saved_env(t_var *env);
 t_var					*safe_t_var(t_var *x, int flag);
 void					logo(t_var *x);

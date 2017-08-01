@@ -55,11 +55,11 @@ void				len_obj(char **matrix, int i, t_var *x)
 **
 */
 
-int						max_width(char **mtx)
+int					max_width(char **mtx)
 {
-	int					max;
-	int					i;
-	int					tmp;
+	int				max;
+	int				i;
+	int				tmp;
 
 	max = 0;
 	i = -1;

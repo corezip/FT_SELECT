@@ -54,7 +54,6 @@ void		continue_term(int signum)
 	init_var(x, x->ac, x->ar);
 	safe_t_var(x, 0);
 	print_screen_se(1);
-	// read_key(x);
 }
 
 /*
@@ -105,7 +104,7 @@ int			len_print(int len, char **obj, t_var *x)
 	double	tmp;
 
 	x->col = x->height - 5;
-	x->x_nums = (x->width / x->col);
+	x->x_nums = x->width / x->largo;
 	i = x->x_nums;
 	tmp = x->x_nums - i;
 	if (tmp > 0.001)
