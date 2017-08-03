@@ -122,5 +122,5 @@ void		print_screen_se(int sig)
 	if (p <= (x->width / x->largo) && (x->total / x->col) <= (x->x_nums - 1))
 		print_objects(x);
 	else
-		ft_putstr("Houston we have a problem!");
+		ft_putstr("Houston, We have a problem!");
 }
