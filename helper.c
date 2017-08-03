@@ -109,9 +109,6 @@ int			len_print(int len, char **obj, t_var *x)
 	tmp = x->x_nums - i;
 	if (tmp > 0.001)
 		x->x_nums = (x->x_nums - tmp) + 1;
-	i = 0;
-	while (obj[i])
-		i++;
-	x->total = i;
+	num_obj(x);
 	return (0);
 }

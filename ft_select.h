@@ -69,6 +69,7 @@ int						print_objects_2(t_var *x, int *row, int *col);
 t_var					*saved_env(t_var *env);
 t_var					*safe_t_var(t_var *x, int flag);
 void					logo(t_var *x);
+void					num_obj(t_var *x);
 void					del_opt(t_var *x);
 void					set_signals(void);
 void					read_key(t_var *x);

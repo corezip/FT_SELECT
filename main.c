@@ -18,11 +18,26 @@
 **
 */
 
+void			num_obj(t_var *x)
+{
+	int			i;
+	int			tmp;
+
+	i = -1;
+	while (x->objects[++i])
+		if ((tmp = ft_strlen(x->objects[i])) > x->len)
+			x->len = tmp;
+	x->total = i;
+}
+
+/*
+**
+** ---------------------------------------------------------------------------
+**
+*/
+
 void			init_var(t_var *x, int ac, char **ar)
 {
-	int		i;
-	int		tmp;
-
 	x->len = 0;
 	x->full = 0;
 	x->cursor = 0;
@@ -31,11 +46,7 @@ void			init_var(t_var *x, int ac, char **ar)
 	x->objects = ar + 1;
 	x->arg_width = max_width(x->objects);
 	x->select = (int *)ft_memalloc(sizeof(int) * x->arg_height);
-	i = -1;
-	while (x->objects[++i])
-		if ((tmp = ft_strlen(x->objects[i])) > x->len)
-			x->len = tmp;
-	x->total = i;
+	num_obj(x);
 }
 
 /*
