@@ -115,9 +115,6 @@ void		print_screen_se(int sig)
 	size_term(x);
 	logo(x);
 	len_print(0, x->objects, x);
-	// printf("%f\n", x->total);
-	// printf("X terminal: %f\n", x->width);
-	// printf("Y terminal: %f\n", x->height);
 	if (x->total > x->col)
 		p = (x->col / x->largo);
 	else
