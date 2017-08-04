@@ -92,9 +92,3 @@ void					ft_arr_remove_nth(int nth, void *array,
 	size_t size, int len);
 
 #endif
-
-/*
-**
-** ---------------------------------------------------------------------------
-**
-*/

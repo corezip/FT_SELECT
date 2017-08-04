@@ -119,13 +119,13 @@ int				main(int ac, char **ar)
 	t_var		*x;
 
 	if (ac < 2)
-		printf("no arguments!!\n");
+		ft_printfcolor("no arguments!!\n");
 	else
 	{
 		x = NULL;
 		x = saved_env(x);
 		if (!set_stage(x))
-			printf("Vamos mal\n");
+			ft_printfcolor("Vamos mal\n");
 		set_signals();
 		x->ar = ar;
 		x->ac = ac;

@@ -13,9 +13,9 @@
 #include "ft_select.h"
 
 /*
-**
+** SIZE_TERM
 ** ---------------------------------------------------------------------------
-**
+** Funcion que utiliza winzise para conocer el tamaño de X y Y de la terminal.
 */
 
 void				size_term(t_var *x)
@@ -30,9 +30,9 @@ void				size_term(t_var *x)
 }
 
 /*
-**
+** LEN_OBJ
 ** ---------------------------------------------------------------------------
-**
+** Funcion que obtiene el largo del argumento mas largo.
 */
 
 void				len_obj(char **matrix, int i, t_var *x)
@@ -50,9 +50,9 @@ void				len_obj(char **matrix, int i, t_var *x)
 }
 
 /*
-**
+** MAX_WIDTH
 ** ---------------------------------------------------------------------------
-**
+** Funcion que obtiene el largo del argumento mas largo.
 */
 
 int					max_width(char **mtx)

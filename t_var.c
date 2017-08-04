@@ -13,9 +13,10 @@
 #include "ft_select.h"
 
 /*
-**
+** FT_ARR_REMOVE_NTH
 ** ---------------------------------------------------------------------------
-**
+** Estructura donde prepararemos al argumento para poder moverlo al final de
+** matriz de manera correcta para evitar cualquier error de memoria.
 */
 
 void			ft_arr_remove_nth(int nth, void *array, size_t size, int len)
@@ -27,9 +28,10 @@ void			ft_arr_remove_nth(int nth, void *array, size_t size, int len)
 }
 
 /*
-**
+** SAVED_ENV
 ** ---------------------------------------------------------------------------
-**
+** Si la estructura no existe le asigna un tamaño en memoria o en caso de ser
+** existir la guarda en una estructura estatica.
 */
 
 t_var			*saved_env(t_var *env)
@@ -49,8 +51,10 @@ t_var			*saved_env(t_var *env)
 }
 
 /*
-**
+** SAFE_T_VAR
 ** ---------------------------------------------------------------------------
+** Funcion donde almacenaremos los valores de la estructura en una estructura
+** estatica en la memoria para recuperar los valores del programa.
 ** Flag == 0 salva la estructura.
 ** Flag > 0 recupera la estructura.
 */

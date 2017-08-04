@@ -13,9 +13,9 @@
 #include "ft_select.h"
 
 /*
-**
+** FT_CURSOR_GOTO
 ** ---------------------------------------------------------------------------
-**
+** Funcion para imprimir la terminal desde las coordenadas correctas.
 */
 
 void			ft_cursor_goto(int x, int y)
@@ -31,9 +31,9 @@ void			ft_cursor_goto(int x, int y)
 }
 
 /*
-**
+** MODO_STR
 ** ---------------------------------------------------------------------------
-**
+** Funcion para usar tgetstr de manera segura sin tener valores nulos.
 */
 
 void			mode_str(char *str)
@@ -44,9 +44,10 @@ void			mode_str(char *str)
 }
 
 /*
-**
+** FT_CLRSCREEN
 ** ---------------------------------------------------------------------------
-**
+** Funcion con la que limpiaremos la pantalla para poder hacer el llamado para
+** la impresion correcta y limpia de la terminal.
 */
 
 void			ft_clrscreen(int rows)

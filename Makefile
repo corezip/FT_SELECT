@@ -6,11 +6,11 @@ SRC		=	main.c \
 			print.c \
 			size.c \
 			t_var.c \
-			termcpas.c
+			termcaps.c
 
 OBJ		= $(SRC:.c=.o)
 
-CFLAGS	= -Wall -Wextra -Werror
+# CFLAGS	= -Wall -Wextra -Werror
 
 CC		= gcc
 

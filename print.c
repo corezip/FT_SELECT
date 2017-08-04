@@ -13,9 +13,12 @@
 #include "ft_select.h"
 
 /*
-**
+** LOGO
 ** ---------------------------------------------------------------------------
-**
+** Esta funcion imprime el logo superior del programa para darle un poco de
+** estetica, donde se comprueba si tiene espacio para imprimirlo.
+** En caso de no haber espacio, no se imprime y la impresion de las columnas
+** se recorren hacia la parte superior de la terminal.
 */
 
 void		logo(t_var *x)
@@ -38,9 +41,11 @@ void		logo(t_var *x)
 }
 
 /*
-**
+** PRINT_OBJECTS_2
 ** ---------------------------------------------------------------------------
-**
+**  Esta funcion hace la comprobacion de que argumentos, si estan
+** seleccionados o no, para asi imprimir el argumento y despues imprimir los
+** espacios faltantes para que sea del mismo tamaño del argumento mas largo.
 */
 
 int			print_objects_2(t_var *x, int *row, int *col)
@@ -66,9 +71,11 @@ int			print_objects_2(t_var *x, int *row, int *col)
 }
 
 /*
-**
+** PRINT_OBJECTS
 ** ---------------------------------------------------------------------------
-**
+** Esta funcion hace los loop y el control de los argumentos, de el tamaño de
+** la terminal, hace la comprobacion de la existencia de argumentos para
+** proceder a la funcion que se encarga de la impresion.
 */
 
 void		print_objects(t_var *x)
@@ -98,9 +105,10 @@ void		print_objects(t_var *x)
 }
 
 /*
-**
+** PRINT_SCREEN_SE
 ** ---------------------------------------------------------------------------
-**
+** Esta funcion es primer paso para la impresion en la nueva terminal, dando
+** el inicio a todos los pasos para el control e impresion de los argumentos.
 */
 
 void		print_screen_se(int sig)
@@ -123,7 +131,6 @@ void		print_screen_se(int sig)
 		p = (x->col / x->largo);
 	else
 		p = 1;
-	printf("%f\n", x->total);
 	if (p <= (x->width / x->largo) && (x->total / x->col) <= (x->x_nums - 1))
 		print_objects(x);
 	else

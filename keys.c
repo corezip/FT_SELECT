@@ -13,9 +13,11 @@
 #include "ft_select.h"
 
 /*
-**
+** KEY_UP_DOWN
 ** ---------------------------------------------------------------------------
-**
+** Esta funcion es la que controla los movimientos entre los argumentos y las
+** teclas de arriba, abajo, derecha e izquierda; para poder navegar entre
+** la interfaz.
 */
 
 void		key_up_down(t_var *x, long key)
@@ -47,9 +49,11 @@ void		key_up_down(t_var *x, long key)
 }
 
 /*
-**
+** KEY_SPACE
 ** ---------------------------------------------------------------------------
-**
+** Con esta funcion hacemos la activacion o desactivacion del algumento para
+** su marcado o desmarcado, cambiando el valor de la matriz select a 0 para
+** descativarlo, o 1 para activarlo.
 */
 
 void		key_space(t_var *x, long key)
@@ -68,9 +72,11 @@ void		key_space(t_var *x, long key)
 }
 
 /*
-**
+** DEL_OPT
 ** ---------------------------------------------------------------------------
-**
+** Esta funcion hara posible eliminar de la pantalla los argumentos que sean
+** seleccionados para su eliminacion, pero lo unico que hace esta funcion es
+** mover ese argumento al final de la matriz.
 */
 
 void		del_opt(t_var *x)
@@ -88,9 +94,10 @@ void		del_opt(t_var *x)
 }
 
 /*
-**
+** RETURN_VALUES
 ** ---------------------------------------------------------------------------
-**
+** Esta funcion regresara la vista de la terminal original antes de iniciar el
+** ft_select e imprimira los argumentos seleccionados.
 */
 
 void		return_values(t_var *x)
@@ -118,9 +125,10 @@ void		return_values(t_var *x)
 }
 
 /*
-**
+** READ_KEY
 ** ---------------------------------------------------------------------------
-**
+** Esta funcion renocera el valor de la tecla que estamos recibiendo y la
+** compara con las que ya tenemos definidas en el header.
 */
 
 void		read_key(t_var *x)
@@ -142,7 +150,7 @@ void		read_key(t_var *x)
 		else if (key == KEY_DAR)
 			return_values(x);
 		else if (key == KEY_STAR || key == KEY_MINUS)
-			printf("minus\n");
+			ft_printfcolor("minus\n");
 		else if (key == KEY_ESC)
 			safe_exit(0);
 		else
