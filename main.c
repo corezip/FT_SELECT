@@ -13,9 +13,9 @@
 #include "ft_select.h"
 
 /*
-**
+** NUM_OBJ
 ** ---------------------------------------------------------------------------
-**
+** Cuenta el numbero de elemtos dentro de la matriz.
 */
 
 void			num_obj(t_var *x)
@@ -31,9 +31,9 @@ void			num_obj(t_var *x)
 }
 
 /*
-**
+** INIT_VAR
 ** ---------------------------------------------------------------------------
-**
+** Inicializa las variables de la estructura.
 */
 
 void			init_var(t_var *x, int ac, char **ar)
@@ -50,9 +50,10 @@ void			init_var(t_var *x, int ac, char **ar)
 }
 
 /*
-**
+** SETG_STAGE
 ** ---------------------------------------------------------------------------
-**
+** Pone la base de datos en un modo especial para modificar la terminal y
+** obtiene sus medidas.
 */
 
 int				set_stage(t_var *x)
@@ -73,9 +74,9 @@ int				set_stage(t_var *x)
 }
 
 /*
-**
+** SET_SIGNALS
 ** ---------------------------------------------------------------------------
-**
+** Activa todas las señales para los casos que se usan en el proyecto.
 */
 
 void			set_signals(void)
@@ -108,9 +109,9 @@ void			set_signals(void)
 }
 
 /*
-**
+** MAIN
 ** ---------------------------------------------------------------------------
-**
+** !!!!!!!!!!!!!
 */
 
 int				main(int ac, char **ar)
@@ -121,6 +122,7 @@ int				main(int ac, char **ar)
 		printf("no arguments!!\n");
 	else
 	{
+		x = NULL;
 		x = saved_env(x);
 		if (!set_stage(x))
 			printf("Vamos mal\n");

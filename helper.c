@@ -72,9 +72,10 @@ void		safe_exit(int singnum)
 }
 
 /*
-**
+** PUT_SPACE
 ** ---------------------------------------------------------------------------
-**
+** Imprime los espacios que hacen falta en el argumento para tener alineadas
+** las columnas.
 */
 
 void		put_space(t_var *x, char *str)
@@ -90,9 +91,10 @@ void		put_space(t_var *x, char *str)
 }
 
 /*
-**
+** LEN_PRINT
 ** ---------------------------------------------------------------------------
-**
+** Esta funcion hace las matematicas para obtener el numero de columnas a
+** imprimir, tomando en cuenta el largo del objecto mas largo.
 */
 
 int			len_print(int len, char **obj, t_var *x)
