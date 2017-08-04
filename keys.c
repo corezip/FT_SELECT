@@ -73,21 +73,13 @@ void		key_space(t_var *x, long key)
 **
 */
 
-void				ft_arr_remove_nth(int nth, void *array, size_t size, int len)
-{
-	unsigned char	*elem;
-
-	elem = (((unsigned char *)array) + (nth * size));
-	ft_memmove((void *)elem, (void *)(elem + size), (len - nth) * size);
-}
-
 void		del_opt(t_var *x)
 {
 	int		i;
 
 	num_obj(x);
 	if (x->select[x->cursor] == 1)
-			x->total_selected -= 1;
+		x->total_selected -= 1;
 	ft_arr_remove_nth(x->cursor, x->objects, sizeof(char *), x->total);
 	ft_arr_remove_nth(x->cursor, x->select, sizeof(int), x->total);
 	x->arg_height -= 1;

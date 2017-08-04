@@ -30,7 +30,10 @@ void		logo(t_var *x)
 		ft_putstr("▒█▀▀▀ ▀▀█▀▀ ▒█▀▀▀█ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▀▀█▀▀\n");
 		ft_putstr("▒█▀▀▀ ░▒█░░ ░▀▀▀▄▄ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█░░░ ░▒█░░\n");
 		ft_putstr("▒█░░░ ░▒█░░ ▒█▄▄▄█ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄ ▒█▄▄█ ░▒█░░\n\n");
+		x->z = 5;
 	}
+	else
+		x->z = 0;
 	len_obj(x->objects, -1, x);
 }
 
@@ -75,7 +78,7 @@ void		print_objects(t_var *x)
 	int		current;
 	int		cursor;
 
-	cursor = 5;
+	cursor = x->z;
 	col = 0;
 	current = 0;
 	while (x->objects[col] && col < x->col)
@@ -110,6 +113,7 @@ void		print_screen_se(int sig)
 	row = -1;
 	col = 0;
 	x = safe_t_var(x, 1);
+	x->y = tgetnum("li");
 	ft_clrscreen(x->y);
 	ft_cursor_goto(0, 0);
 	size_term(x);
@@ -119,6 +123,7 @@ void		print_screen_se(int sig)
 		p = (x->col / x->largo);
 	else
 		p = 1;
+	printf("%f\n", x->total);
 	if (p <= (x->width / x->largo) && (x->total / x->col) <= (x->x_nums - 1))
 		print_objects(x);
 	else

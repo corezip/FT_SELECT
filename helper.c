@@ -48,11 +48,8 @@ void		continue_term(int signum)
 	t_var	*x;
 
 	signum++;
-	x = safe_t_var(x, 1);
 	set_stage(x);
 	set_signals();
-	init_var(x, x->ac, x->ar);
-	safe_t_var(x, 0);
 	print_screen_se(1);
 }
 

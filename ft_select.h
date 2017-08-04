@@ -41,6 +41,7 @@ typedef	struct			s_var
 	struct termios		term;
 	int					x;
 	int					y;
+	int					z;
 	int					ac;
 	int					len;
 	int					full;
@@ -87,6 +88,8 @@ void					key_space(t_var *x, long key);
 void					put_space(t_var *x, char *str);
 void					init_var(t_var *x, int ac, char **ar);
 void					len_obj(char **matrix, int i, t_var *x);
+void					ft_arr_remove_nth(int nth, void *array,
+	size_t size, int len);
 
 #endif
 
