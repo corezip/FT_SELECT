@@ -13,9 +13,10 @@
 #include "ft_select.h"
 
 /*
-**
+** SUSPEND_TERM
 ** ---------------------------------------------------------------------------
-**
+** Esta funcion esta dedicada a finalizar de manera segura todo el ft_select
+** sin dejar rastros de el.
 */
 
 void		suspend_term(int signum)
@@ -38,9 +39,10 @@ void		suspend_term(int signum)
 }
 
 /*
-**
+** CONTINUE_TERM
 ** ---------------------------------------------------------------------------
-**
+** En esta Funcion recuperaremos todos los datos y vista de la terminal que
+** que previamente se habian guardado.
 */
 
 void		continue_term(int signum)
@@ -54,9 +56,10 @@ void		continue_term(int signum)
 }
 
 /*
-**
+** SAFE_EXIT
 ** ---------------------------------------------------------------------------
-**
+** Guarda la vista y datos de la terminal para poder recuperarlos mas adelate
+** de asi ser necesario.
 */
 
 void		safe_exit(int singnum)
