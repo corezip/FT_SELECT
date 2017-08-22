@@ -119,15 +119,15 @@ int				main(int ac, char **ar)
 	t_var		*x;
 
 	if (ac < 2)
-		ft_printfcolor("no arguments!!\n");
+		ft_printfcolor("%s\n", "no arguments!!", 31);
 	else
 	{
 		x = NULL;
 		x = saved_env(x);
+		get_ar(ac - 1, ar, x);
 		if (!set_stage(x))
 			ft_printfcolor("Vamos mal\n");
 		set_signals();
-		x->ar = ar;
 		x->ac = ac;
 		init_var(x, ac, ar);
 		safe_t_var(x, 0);

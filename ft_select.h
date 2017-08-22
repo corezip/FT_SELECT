@@ -29,6 +29,9 @@
 # define KEY_SPC		32
 # define KEY_STAR		42
 # define KEY_MINUS		45
+# define KEY_S			115
+# define KEY_E			101
+# define KEY_R			114
 # define KEY_BSP		127
 # define KEY_IZQ		4479771
 # define KEY_ARR		4283163
@@ -85,7 +88,9 @@ void					print_screen_se(int sig);
 void					continue_term(int signum);
 void					ft_cursor_goto(int x, int y);
 void					key_space(t_var *x, long key);
+void					extra_key(t_var *x , long key);
 void					put_space(t_var *x, char *str);
+void					get_ar(int ac, char **ar, t_var *x);
 void					init_var(t_var *x, int ac, char **ar);
 void					len_obj(char **matrix, int i, t_var *x);
 void					ft_arr_remove_nth(int nth, void *array,

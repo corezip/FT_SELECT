@@ -46,6 +46,7 @@ void		key_up_down(t_var *x, long key)
 		if (x->cursor + x->col < x->total)
 			x->cursor += x->col;
 	}
+	extra_key(x, key);
 }
 
 /*
@@ -92,6 +93,8 @@ void		del_opt(t_var *x)
 	ft_arr_remove_nth(x->cursor, x->select, sizeof(int), x->total);
 	x->arg_height -= 1;
 	x->cursor -= 1;
+	if (x->arg_height == 0)
+		return_values(x);
 	key_up_down(x, KEY_ABJ);
 }
 

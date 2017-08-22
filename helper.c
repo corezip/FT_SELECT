@@ -52,6 +52,7 @@ void		continue_term(int signum)
 
 	signum++;
 	x = NULL;
+	x = safe_t_var(x, 1);
 	set_stage(x);
 	set_signals();
 	print_screen_se(1);
