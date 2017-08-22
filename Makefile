@@ -10,7 +10,7 @@ SRC		=	main.c \
 
 OBJ		= $(SRC:.c=.o)
 
-# CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror
 
 CC		= gcc
 

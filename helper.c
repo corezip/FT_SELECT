@@ -25,6 +25,7 @@ void		suspend_term(int signum)
 	char	tmp[3];
 
 	signum++;
+	x = NULL;
 	x = safe_t_var(x, 1);
 	ft_clrscreen(x->y);
 	x->term.c_lflag |= (ICANON | ECHO);
@@ -50,6 +51,7 @@ void		continue_term(int signum)
 	t_var	*x;
 
 	signum++;
+	x = NULL;
 	set_stage(x);
 	set_signals();
 	print_screen_se(1);
@@ -66,11 +68,13 @@ void		safe_exit(int singnum)
 {
 	t_var	*x;
 
+	x = NULL;
 	x = safe_t_var(x, 1);
 	ft_memdel((void**)&x->select);
 	ft_clrscreen(x->y);
 	mode_str("te");
 	mode_str("ve");
+	singnum = 0;
 	exit(3);
 }
 
@@ -100,7 +104,7 @@ void		put_space(t_var *x, char *str)
 ** imprimir, tomando en cuenta el largo del objecto mas largo.
 */
 
-int			len_print(int len, char **obj, t_var *x)
+int			len_print(t_var *x)
 {
 	int		i;
 	double	tmp;

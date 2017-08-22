@@ -23,16 +23,20 @@
 
 void		logo(t_var *x)
 {
-	int		len;
+	char	*z;
 
 	x->num_obj = -1;
 	while (x->objects[++x->num_obj])
 		;
 	if (x->width > 47 && x->height > 5)
 	{
-		ft_putstr("▒█▀▀▀ ▀▀█▀▀ ▒█▀▀▀█ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▀▀█▀▀\n");
-		ft_putstr("▒█▀▀▀ ░▒█░░ ░▀▀▀▄▄ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█░░░ ░▒█░░\n");
-		ft_putstr("▒█░░░ ░▒█░░ ▒█▄▄▄█ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄ ▒█▄▄█ ░▒█░░\n\n");
+		ft_putstr_fd("▒█▀▀▀ ▀▀█▀▀ ▒█▀▀▀█ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▀▀█▀▀\n", 2);
+		ft_putstr_fd("▒█▀▀▀ ░▒█░░ ░▀▀▀▄▄ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█░░░ ░▒█░░\n", 2);
+		ft_putstr_fd("▒█░░░ ░▒█░░ ▒█▄▄▄█ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄ ▒█▄▄█ ░▒█░░\n", 2);
+		z = ft_itoa(x->total_selected);
+		ft_putstr_fd("Total Selected: ", 2);
+		ft_putstr_fd(z, 2);
+		ft_putstr_fd("\n", 2);
 		x->z = 5;
 	}
 	else
@@ -92,7 +96,7 @@ void		print_objects(t_var *x)
 	{
 		ft_cursor_goto(0, cursor);
 		row = col;
-		while (x->objects[row] && current < (x->width / x->col))
+		while (x->objects[row] && current <= (x->width / x->col))
 		{
 			if (print_objects_2(x, &row, &col) == 0)
 				break ;
@@ -118,15 +122,17 @@ void		print_screen_se(int sig)
 	double	p;
 	t_var	*x;
 
+	x = NULL;
 	row = -1;
 	col = 0;
+	sig = 0;
 	x = safe_t_var(x, 1);
 	x->y = tgetnum("li");
 	ft_clrscreen(x->y);
 	ft_cursor_goto(0, 0);
 	size_term(x);
 	logo(x);
-	len_print(0, x->objects, x);
+	len_print(x);
 	if (x->total > x->col)
 		p = (x->col / x->largo);
 	else

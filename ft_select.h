@@ -63,9 +63,9 @@ typedef	struct			s_var
 	double				height;
 }						t_var;
 
+int						len_print(t_var *x);
 int						set_stage(t_var *x);
 int						max_width(char **mtx);
-int						len_print(int len, char **obj, t_var *x);
 int						print_objects_2(t_var *x, int *row, int *col);
 t_var					*saved_env(t_var *env);
 t_var					*safe_t_var(t_var *x, int flag);

@@ -68,6 +68,7 @@ void		key_space(t_var *x, long key)
 		x->select[x->cursor] = 0;
 		x->total_selected -= 1;
 	}
+	key = 0;
 	key_up_down(x, KEY_ABJ);
 }
 
@@ -84,6 +85,7 @@ void		del_opt(t_var *x)
 	int		i;
 
 	num_obj(x);
+	i = 0;
 	if (x->select[x->cursor] == 1)
 		x->total_selected -= 1;
 	ft_arr_remove_nth(x->cursor, x->objects, sizeof(char *), x->total);
@@ -114,7 +116,7 @@ void		return_values(t_var *x)
 	{
 		if (x->select[i] == 1)
 		{
-			ft_printfcolor("%s", x->objects[i], 94);
+			ft_putstr(x->objects[i]);
 			cont += 1;
 			if (cont != x->total_selected)
 				ft_putchar(' ');
