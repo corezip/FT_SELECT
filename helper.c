@@ -3,119 +3,134 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gsolis <gsolis@student.42.us.org>          +#+  +:+       +#+        */
+/*   By: gsolis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/07/25 16:26:53 by gsolis            #+#    #+#             */
-/*   Updated: 2017/07/25 16:26:55 by gsolis           ###   ########.fr       */
+/*   Created: 2017/04/10 16:26:26 by gsolis            #+#    #+#             */
+/*   Updated: 2017/04/10 16:26:28 by gsolis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_select.h"
+#include "ft_ls.h"
 
-/*
-** SUSPEND_TERM
-** ---------------------------------------------------------------------------
-** Esta funcion esta dedicada a finalizar de manera segura todo el ft_select
-** sin dejar rastros de el.
-*/
-
-void		suspend_term(int signum)
+void				else_helper(struct stat filestat, t_top *x, char *file)
 {
-	t_var	*x;
-	char	tmp[3];
-
-	signum++;
-	x = NULL;
-	x = safe_t_var(x, 1);
-	ft_clrscreen(x->y);
-	x->term.c_lflag |= (ICANON | ECHO);
-	tcsetattr(0, TCSANOW, &x->term);
-	mode_str("te");
-	mode_str("ve");
-	signal(SIGTSTP, SIG_DFL);
-	tmp[0] = x->term.c_cc[VSUSP];
-	tmp[1] = '\n';
-	tmp[2] = '\0';
-	ioctl(0, TIOCSTI, &tmp);
-}
-
-/*
-** CONTINUE_TERM
-** ---------------------------------------------------------------------------
-** En esta Funcion recuperaremos todos los datos y vista de la terminal que
-** que previamente se habian guardado.
-*/
-
-void		continue_term(int signum)
-{
-	t_var	*x;
-
-	signum++;
-	x = NULL;
-	x = safe_t_var(x, 1);
-	set_stage(x);
-	set_signals();
-	print_screen_se(1);
-}
-
-/*
-** SAFE_EXIT
-** ---------------------------------------------------------------------------
-** Guarda la vista y datos de la terminal para poder recuperarlos mas adelate
-** de asi ser necesario.
-*/
-
-void		safe_exit(int singnum)
-{
-	t_var	*x;
-
-	x = NULL;
-	x = safe_t_var(x, 1);
-	ft_memdel((void**)&x->select);
-	ft_clrscreen(x->y);
-	mode_str("te");
-	mode_str("ve");
-	singnum = 0;
-	exit(3);
-}
-
-/*
-** PUT_SPACE
-** ---------------------------------------------------------------------------
-** Imprime los espacios que hacen falta en el argumento para tener alineadas
-** las columnas.
-*/
-
-void		put_space(t_var *x, char *str)
-{
-	int tmp;
-
-	tmp = ft_strlen(str);
-	while (x->len > tmp)
+	if (S_ISDIR(filestat.st_mode))
 	{
-		ft_putstr_fd(" ", 2);
-		tmp++;
+		if (S_ISDIR(filestat.st_mode) && x->flag.rr == 0)
+			dir_arg(x, file);
+		else
+			get_file2(file, x);
 	}
+	else
+		print_basic_color(file);
 }
 
 /*
-** LEN_PRINT
+** GET_FILE_T
 ** ---------------------------------------------------------------------------
-** Esta funcion hace las matematicas para obtener el numero de columnas a
-** imprimir, tomando en cuenta el largo del objecto mas largo.
+** Con esta funcion sabremos el camino que tomara el file que fue introducido
+** por argumento.
 */
 
-int			len_print(t_var *x)
+void				get_file_t(char *file, t_top *x)
 {
-	int		i;
-	double	tmp;
+	struct stat		filestat;
 
-	x->col = x->height - 5;
-	x->x_nums = x->width / x->largo;
-	i = x->x_nums;
-	tmp = x->x_nums - i;
-	if (tmp > 0.001)
-		x->x_nums = (x->x_nums - tmp) + 1;
-	num_obj(x);
-	return (0);
+	if (stat(file, &filestat) < 0)
+		perror("Error: ");
+	if (S_ISDIR(filestat.st_mode))
+	{
+		x->type.flag = 1;
+		x->type.j = -1;
+		x->flag.rec = 2;
+		recurtion_mexa_t(file, x, -1);
+	}
+	else if (x->flag.l > 0)
+		print_value_ls(file);
+	else
+		print_basic_color(file);
+}
+
+/*
+** FT_SWAPCHAR
+** ---------------------------------------------------------------------------
+** Esta funcion hara un simple cambio de nombres en la matrix donde se
+** almacenan los nombres de los archivos.
+*/
+
+void				ft_swapchar(char **a, char **b)
+{
+	char			*c;
+
+	c = ft_strdup(*a);
+	*a = ft_strdup(*b);
+	*b = ft_strdup(c);
+}
+
+/*
+** FT_MAKE_MATRIX
+** ---------------------------------------------------------------------------
+** Esta funcion hara una matriz para almacenar los nombres de los files del
+** directorios en donde se esta trabajando.
+*/
+
+char				**ft_make_matrix(int size, t_top *x, char *path)
+{
+	struct dirent	*pdirent;
+	DIR				*pdir;
+	char			**matrix;
+
+	matrix = (char **)malloc(sizeof(char *) * (size + 1));
+	if (safe_lines(&pdir, path, x) == 1)
+		return (matrix);
+	while ((pdirent = readdir(pdir)) != NULL)
+	{
+		if (pdirent->d_name[0] == '.' && x->flag.a >= 1)
+		{
+			matrix[x->dir.i] = ft_strdup(pdirent->d_name);
+			x->dir.i++;
+		}
+		else if (pdirent->d_name[0] != '.' &&
+			(x->flag.a == 0 || x->flag.a >= 1))
+		{
+			matrix[x->dir.i] = ft_strdup(pdirent->d_name);
+			x->dir.i++;
+		}
+	}
+	matrix[x->dir.i] = NULL;
+	closedir(pdir);
+	return (matrix);
+}
+
+/*
+** FT_LENDIR
+** ---------------------------------------------------------------------------
+** Con esta funcion obtendremos el numero de archivos que tiene el directorio
+** donde estamos trabajando.
+*/
+
+int					ft_lendir(t_top *x, char *path)
+{
+	struct dirent	*pdirent;
+	DIR				*pdir;
+	int				i;
+
+	x->flag.error = 0;
+	if (!(pdir = opendir(path)))
+	{
+		ft_printf("Error: %s %s\n", path, strerror(errno));
+		x->flag.error = 1;
+		return (0);
+	}
+	i = 0;
+	while ((pdirent = readdir(pdir)) != NULL)
+	{
+		if (pdirent->d_name[0] == '.' && x->flag.a >= 1)
+			i++;
+		else if (pdirent->d_name[0] != '.' && (x->flag.a == 0 ||
+			x->flag.a >= 1))
+			i++;
+	}
+	closedir(pdir);
+	return (i);
 }

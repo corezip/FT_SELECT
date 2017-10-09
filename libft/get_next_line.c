@@ -15,7 +15,6 @@
 static void			ft_put(char *tmp_str, char **str, char *heap)
 {
 	*str = ft_strjoin(tmp_str, heap);
-	ft_memdel((void**)&tmp_str);
 }
 
 static int			ft_check(int ret, char **line)
@@ -74,11 +73,9 @@ int					get_next_line(int const fd, char **line)
 	heap = ft_strnew(BUFF_SIZE);
 	ft_bzero(heap, BUFF_SIZE);
 	ret = read_file(fd, heap, &str[fd], line);
-	ft_memdel((void**)&heap);
 	if (ret != 0 || str[fd] == NULL || str[fd][0] == '\0')
 		return (ft_check(ret, line));
 	*line = str[fd];
 	str[fd] = NULL;
-	ft_memdel((void**)&str);
 	return (1);
 }

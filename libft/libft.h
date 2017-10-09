@@ -239,9 +239,5 @@ int					get_next_line(int const fd, char **line);
 void				ft_printfcolor(const char *format, ...);
 void				putcstr(char const *s, size_t col);
 void				set_color(int c);
-void				ft_lstaddback(t_list **alst, t_list *new);
-void				ft_lstdeletenode(t_list *e, int nb);
-void				ft_matrix(char **matrix);
-void				ft_delmat(char ***matrix);
 
 #endif

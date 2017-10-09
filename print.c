@@ -1,145 +1,177 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gsolis <gsolis@student.42.us.org>          +#+  +:+       +#+        */
+/*   By: gsolis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/07/20 18:34:24 by gsolis            #+#    #+#             */
-/*   Updated: 2017/07/20 18:34:26 by gsolis           ###   ########.fr       */
+/*   Created: 2017/04/10 16:26:26 by gsolis            #+#    #+#             */
+/*   Updated: 2017/04/10 16:26:28 by gsolis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_select.h"
+#include "ft_ls.h"
 
 /*
-** LOGO
+** PRINT_BASIC_T
 ** ---------------------------------------------------------------------------
-** Esta funcion imprime el logo superior del programa para darle un poco de
-** estetica, donde se comprueba si tiene espacio para imprimirlo.
-** En caso de no haber espacio, no se imprime y la impresion de las columnas
-** se recorren hacia la parte superior de la terminal.
+** Esta funcion hara el acomodado de la flag "t" y hara la impresion del
+** nombre sin mas atributos.
 */
 
-void		logo(t_var *x)
+void				print_basic_t(t_top *x, char **matrix, char **times)
 {
-	char	*z;
-
-	x->num_obj = -1;
-	while (x->objects[++x->num_obj])
-		;
-	if (x->width > 47 && x->height > 5)
+	while (x->type.flag != 0)
 	{
-		ft_putstr_fd("▒█▀▀▀ ▀▀█▀▀ ▒█▀▀▀█ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█▀▀█ ▀▀█▀▀\n", 2);
-		ft_putstr_fd("▒█▀▀▀ ░▒█░░ ░▀▀▀▄▄ ▒█▀▀▀ ▒█░░░ ▒█▀▀▀ ▒█░░░ ░▒█░░\n", 2);
-		ft_putstr_fd("▒█░░░ ░▒█░░ ▒█▄▄▄█ ▒█▄▄▄ ▒█▄▄█ ▒█▄▄▄ ▒█▄▄█ ░▒█░░\n", 2);
-		z = ft_itoa(x->total_selected);
-		ft_putstr_fd("Total Selected: ", 2);
-		ft_putstr_fd(z, 2);
-		ft_memdel((void**)&z);
-		ft_putstr_fd("\n", 2);
-		x->z = 5;
-	}
-	else
-		x->z = 0;
-	len_obj(x->objects, -1, x);
-}
-
-/*
-** PRINT_OBJECTS_2
-** ---------------------------------------------------------------------------
-**  Esta funcion hace la comprobacion de que argumentos, si estan
-** seleccionados o no, para asi imprimir el argumento y despues imprimir los
-** espacios faltantes para que sea del mismo tamaño del argumento mas largo.
-*/
-
-int			print_objects_2(t_var *x, int *row, int *col)
-{
-	if (*row == x->cursor)
-		mode_str("us");
-	if (x->select[*row] == 1)
-		mode_str("so");
-	ft_putstr_fd(x->objects[*row], 2);
-	mode_str("ue");
-	mode_str("se");
-	if (*row + x->col < x->total)
-	{
-		put_space(x, x->objects[*row]);
-		ft_putstr_fd(" ", 2);
-	}
-	*row = x->col + *row;
-	if (*row > x->total)
-		return (0);
-	if (*col > x->col)
-		return (0);
-	return (1);
-}
-
-/*
-** PRINT_OBJECTS
-** ---------------------------------------------------------------------------
-** Esta funcion hace los loop y el control de los argumentos, de el tamaño de
-** la terminal, hace la comprobacion de la existencia de argumentos para
-** proceder a la funcion que se encarga de la impresion.
-*/
-
-void		print_objects(t_var *x)
-{
-	int		row;
-	int		col;
-	int		current;
-	int		cursor;
-
-	cursor = x->z;
-	col = 0;
-	current = 0;
-	while (x->objects[col] && col < x->col)
-	{
-		ft_cursor_goto(0, cursor);
-		row = col;
-		while (x->objects[row] && current <= (x->x_nums - 1))
+		x->type.flag = 0;
+		while (times[++x->type.j] != NULL)
 		{
-			if (print_objects_2(x, &row, &col) == 0)
-				break ;
-			current++;
+			if ((times[x->type.j + 1] && ft_strcmp(times[x->type.j],
+				times[x->type.j + 1]) == 0) && (matrix[x->type.j + 1] &&
+				ft_strcmp(matrix[x->type.j], matrix[x->type.j + 1]) < 0))
+			{
+				ft_swapchar(&matrix[x->type.j + 1], &matrix[x->type.j]);
+				x->type.flag++;
+			}
+			if (times[x->type.j + 1] && ft_strcmp(times[x->type.j],
+				times[x->type.j + 1]) < 0)
+			{
+				ft_swapchar(&times[x->type.j], &times[x->type.j + 1]);
+				ft_swapchar(&matrix[x->type.j], &matrix[x->type.j + 1]);
+				x->type.flag++;
+			}
 		}
-		col++;
-		cursor++;
-		current = 0;
+		x->type.j = -1;
 	}
+	x->type.j = -1;
+	while (matrix[++x->type.j] != NULL)
+		print_basic_color(matrix[x->type.j]);
 }
 
 /*
-** PRINT_SCREEN_SE
+** PRINT_BLOCKS_SIZE
 ** ---------------------------------------------------------------------------
-** Esta funcion es primer paso para la impresion en la nueva terminal, dando
-** el inicio a todos los pasos para el control e impresion de los argumentos.
+** Esta funcion obtendra el tamaño de los bloques que utiliza cada archivo.
+** Toma en cuenta la opcion de contar con archivos ocultos o sin ellos.
 */
 
-void		print_screen_se(int sig)
+void				print_blocks_size(t_top *x, char *path)
 {
-	int		col;
-	int		row;
-	double	p;
-	t_var	*x;
+	struct dirent	*pdirent;
 
-	x = NULL;
-	row = -1;
-	col = 0;
-	sig = 0;
-	x = safe_t_var(x, 1);
-	x->y = tgetnum("li");
-	ft_clrscreen(x->y);
-	ft_cursor_goto(0, 0);
-	size_term(x);
-	logo(x);
-	len_print(x);
-	if (x->total > x->col)
-		p = (x->col / x->largo);
+	if (!(x->dir.pdir = opendir(path)))
+	{
+		ft_printf("Error: %s\n", strerror(errno));
+		return ;
+	}
+	x->dir.i = 0;
+	while ((pdirent = readdir(x->dir.pdir)) != NULL)
+	{
+		stat(pdirent->d_name, &x->dir.buff);
+		if (pdirent->d_name[0] == '.' && x->flag.a >= 1)
+		{
+			x->type.size += x->dir.buff.st_blocks;
+			x->dir.i++;
+		}
+		else if (pdirent->d_name[0] != '.' && (x->flag.a == 0 ||
+			x->flag.a > 0))
+		{
+			x->type.size += x->dir.buff.st_blocks;
+			x->dir.i++;
+		}
+	}
+	ft_printf("Total: %d\n", x->type.size);
+	closedir(x->dir.pdir);
+}
+
+/*
+** PRINT_VALUE_RECU
+** ---------------------------------------------------------------------------
+** Esta funcion hara la impresion de los archivos con la flag -R -l activa,
+** hara la union del file junto con el path, dando como resultado la dirrecion
+** correcta, para poder buscar el archivo dentro de esa direccion e imprimir
+** toda su informacion.
+*/
+
+int					print_value_recu(char *file, char *path)
+{
+	struct stat		filestat;
+	struct passwd	*pw;
+	struct group	*gr;
+	char			*tmp;
+	int				i;
+
+	path = ft_strjoin(path, "/");
+	tmp = ft_strjoin(path, file);
+	lstat(tmp, &filestat);
+	pw = getpwuid(filestat.st_uid);
+	gr = getgrgid(filestat.st_gid);
+	i = print_stat(filestat);
+	ft_printf(listxattr(tmp, 0, 0, XATTR_NOFOLLOW) > 0 ? "@" : " ");
+	ft_printf("  %d %s  %s %7d ", filestat.st_nlink, pw->pw_name,
+		gr->gr_name, filestat.st_size);
+	if (i == 0 && !(S_ISDIR(filestat.st_mode)))
+		ft_printf("%s %s\n", ft_strsub(ctime(&filestat.st_ctime), 4, 12), file);
+	else if (i == 1)
+		ft_printfcolor("%s %s -> %s\n", ft_strsub(ctime(&filestat.st_ctime),
+			4, 12), 39, file, 34, get_link(tmp), 31);
 	else
-		p = 1;
-	if (p <= (x->width / x->largo) && (x->total / x->col) <= (x->x_nums - 1))
-		print_objects(x);
+		ft_printfcolor("%s %s\n", ft_strsub(ctime(&filestat.st_ctime), 4, 12),
+			39, file, 34);
+	return (filestat.st_blocks);
+}
+
+/*
+** PRINT_VALUE_LS
+** ---------------------------------------------------------------------------
+** Esta funcion es la impresion para las flag -l o que contenga -l sin haber
+** recibido un file o carpeta por argumento. en caso de recibir como
+** argumento un file o directorio se usara PRINT_VALUE_RECU
+*/
+
+int					print_value_ls(char *file)
+{
+	struct stat		filestat;
+	struct passwd	*pw;
+	struct group	*gr;
+	int				i;
+
+	if (lstat(file, &filestat) < 0)
+		return (1);
+	pw = getpwuid(filestat.st_uid);
+	gr = getgrgid(filestat.st_gid);
+	i = print_stat(filestat);
+	ft_printf(listxattr(file, 0, 0, XATTR_NOFOLLOW) > 0 ? "@" : " ");
+	ft_printf("  %d %s  %s %7d ", filestat.st_nlink, pw->pw_name,
+		gr->gr_name, filestat.st_size);
+	if (i == 0 && !(S_ISDIR(filestat.st_mode)))
+		ft_printf("%s %s\n", ft_strsub(ctime(&filestat.st_ctime), 4, 12), file);
+	else if (i == 1)
+		ft_printfcolor("%s %s -> %s\n", ft_strsub(ctime(&filestat.st_ctime),
+			4, 12), 39, file, 34, get_link(file), 31);
 	else
-		ft_putstr("Houston, We have a problem!");
+		ft_printfcolor("%s %s\n", ft_strsub(ctime(&filestat.st_ctime), 4, 12),
+			39, file, 34);
+	return (filestat.st_blocks);
+}
+
+/*
+** PRINT_BASIC
+** ---------------------------------------------------------------------------
+** esta funcion imprimira en orden ASCII(A - Z) solo los nombres de los
+** archivos sin inforacion.
+*/
+
+void				print_basic(t_top *x, char *path)
+{
+	char			**matrix;
+
+	x->type.flag = 1;
+	x->type.j = 0;
+	x->type.i = ft_lendir(x, path);
+	matrix = ft_make_matrix(x->type.i, x, path);
+	matrix = matrix_sort(x, matrix);
+	x->type.j = -1;
+	while (matrix[++x->type.j] != NULL)
+		print_basic_color(matrix[x->type.j]);
 }

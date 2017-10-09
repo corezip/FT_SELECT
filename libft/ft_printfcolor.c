@@ -21,15 +21,17 @@ void		set_color(int c)
 
 void		putcstr(char const *s, size_t col)
 {
-	set_color(col);
-	ft_putstr(s);
-	set_color(0);
+	if (s)
+	{
+		set_color(col);
+		ft_putstr(s);
+		set_color(0);
+	}
 }
 
 void		ft_printfcolor(const char *format, ...)
 {
 	va_list p;
-	char	*tmp;
 
 	va_start(p, format);
 	while (*format != '\0')
@@ -39,11 +41,7 @@ void		ft_printfcolor(const char *format, ...)
 			if ((*(format + 1)) == 's')
 				putcstr(va_arg(p, char*), va_arg(p, size_t));
 			else if ((*(format + 1)) == 'd')
-			{
-				tmp = ft_itoa(va_arg(p, int));
-				putcstr(tmp, va_arg(p, size_t));
-				ft_memdel((void**)&tmp);
-			}
+				putcstr(ft_itoa(va_arg(p, int)), va_arg(p, size_t));
 			format += 1;
 		}
 		else

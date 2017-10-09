@@ -1,12 +1,7 @@
-NAME	= ft_select
+NAME	= ft_ls
 
-SRC		=	main.c \
-			helper.c \
-			keys.c \
-			print.c \
-			size.c \
-			t_var.c \
-			termcaps.c
+SRC		=	main.c print.c recursion.c sort.c flags.c helper.c time.c print_2.c bonus.c \
+			sort2.c
 
 OBJ		= $(SRC:.c=.o)
 
@@ -18,13 +13,13 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C libft/
-	@$(CC) $(OBJ) -ltermcap -o $(NAME) -L libft/ -lft
-	@echo "\033[32mft_select: Built ft_select. ~(˘▾˘~) \033[0m"
+	@$(CC) $(OBJ) -o $(NAME) -L libft/ -lft
+	@echo "\033[32mFT_LS: Built ft_ls. ~(˘▾˘~) \033[0m"
 
 clean:
 	@make -C libft/ clean
 	@rm -rf $(OBJ)
-	@echo "\033[32mft_select: Cleaned up object files. ~(˘▾˘~) \033[0m"
+	@echo "\033[32mFT_LS: Cleaned up object files. ~(˘▾˘~) \033[0m"
 
 fclean: clean
 	@$(MAKE) -C ./libft/ fclean

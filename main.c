@@ -3,136 +3,192 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gsolis <gsolis@student.42.us.org>          +#+  +:+       +#+        */
+/*   By: gsolis <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/07/11 15:40:53 by gsolis            #+#    #+#             */
-/*   Updated: 2017/07/11 15:40:54 by gsolis           ###   ########.fr       */
+/*   Created: 2017/04/10 16:26:26 by gsolis            #+#    #+#             */
+/*   Updated: 2017/04/10 16:26:28 by gsolis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_select.h"
+#include "ft_ls.h"
 
 /*
-** NUM_OBJ
+** PRINT_BASIC_T_R
 ** ---------------------------------------------------------------------------
-** Cuenta el numbero de elemtos dentro de la matriz.
+** Esta funcion hara el acomodado de la flag "t" y hara la impresion del
+** nombre sin mas atributos de modo reversivo.
 */
 
-void			num_obj(t_var *x)
+void			print_basic_t_r(t_top *x, char **matrix, char **times)
 {
-	int			i;
-	int			tmp;
-
-	i = -1;
-	while (x->objects[++i])
-		if ((tmp = ft_strlen(x->objects[i])) > x->len)
-			x->len = tmp;
-	x->total = i;
+	while (x->type.flag != 0)
+	{
+		x->type.flag = 0;
+		while (times[++x->type.j] != NULL)
+		{
+			if ((times[x->type.j + 1] && ft_strcmp(times[x->type.j],
+				times[x->type.j + 1]) == 0) && (matrix[x->type.j + 1] &&
+				ft_strcmp(matrix[x->type.j], matrix[x->type.j + 1]) > 0))
+			{
+				ft_swapchar(&matrix[x->type.j + 1], &matrix[x->type.j]);
+				x->type.flag++;
+			}
+			if (times[x->type.j + 1] && ft_strcmp(times[x->type.j],
+				times[x->type.j + 1]) > 0)
+			{
+				ft_swapchar(&times[x->type.j], &times[x->type.j + 1]);
+				ft_swapchar(&matrix[x->type.j], &matrix[x->type.j + 1]);
+				x->type.flag++;
+			}
+		}
+		x->type.j = -1;
+	}
+	x->type.j = -1;
+	while (matrix[++x->type.j] != NULL)
+		print_basic_color(matrix[x->type.j]);
 }
 
 /*
-** INIT_VAR
+** FT_LS_T
 ** ---------------------------------------------------------------------------
-** Inicializa las variables de la estructura.
+** Esta funcion hara las funciones basicas de recuperacion de datos, para
+** despues mandarlo a la funcion donde se hara su organizacion por fecha.
 */
 
-void			init_var(t_var *x, int ac, char **ar)
+void			ft_ls_t(t_top *x, char *path)
 {
-	x->len = 0;
-	x->full = 0;
-	x->cursor = 0;
-	x->total_selected = 0;
-	x->arg_height = ac - 1;
-	x->objects = ar + 1;
-	x->arg_width = max_width(x->objects);
-	x->select = (int *)ft_memalloc(sizeof(int) * x->arg_height);
-	num_obj(x);
+	char		**matrix;
+	char		**matrix_time;
+
+	if (security_path(path) == 0)
+		return ;
+	x->type.flag = 1;
+	x->type.j = -1;
+	x->type.i = ft_lendir(x, path);
+	matrix = ft_make_matrix(x->type.i, x, path);
+	if (x->flag.rr > 1)
+		matrix_time = ft_catching_time_r(x->type.i, x, matrix, path);
+	else
+		matrix_time = ft_catching_time(x->type.i, x, matrix, path);
+	x->type.j = -1;
+	if (x->flag.rr >= 1)
+		recurtion_mexa_t(path, x, -1);
+	else if (x->flag.l >= 1 && x->flag.r == 0)
+		comp_matrix_t(x, matrix, matrix_time, path);
+	else if (x->flag.l >= 1 && x->flag.r >= 1)
+		comp_matrix_t_r(x, matrix, matrix_time, path);
+	else if (x->flag.r > 0)
+		print_basic_t_r(x, matrix, matrix_time);
+	else
+		print_basic_t(x, matrix, matrix_time);
 }
 
 /*
-** SETG_STAGE
+** PRINT_r
 ** ---------------------------------------------------------------------------
-** Pone la base de datos en un modo especial para modificar la terminal y
-** obtiene sus medidas.
+** Esta funcion recibe una direccion donde creara una matriz con los que
+** obtendra  los nombres de los archivos desacomodados, despues acomodara en
+** orden de ASCII  pero en reversa (Z - A). E imprimira la matriz con los
+** nombres de los archivos.
 */
 
-int				set_stage(t_var *x)
+void			print_r(t_top *x, char *path)
 {
-	if (tgetent(x->buffer, getenv("TERM")) < 1)
-		return (-1);
-	tcgetattr(0, &x->term);
-	x->term.c_lflag &= ~(ICANON);
-	x->term.c_lflag &= ~(ECHO);
-	x->term.c_cc[VMIN] = 1;
-	x->term.c_cc[VTIME] = 0;
-	tcsetattr(0, 0, &x->term);
-	x->y = tgetnum("li");
-	x->x = tgetnum("co");
-	mode_str("ti");
-	mode_str("vi");
-	return (1);
+	char		**matrix;
+
+	x->type.flag = 1;
+	x->type.j = 0;
+	x->type.i = ft_lendir(x, path);
+	matrix = ft_make_matrix(x->type.i, x, path);
+	while (x->type.flag != 0)
+	{
+		x->type.flag = 0;
+		while (matrix[x->type.j] != NULL)
+		{
+			if (matrix[x->type.j + 1] && ft_strcmp(matrix[x->type.j],
+					matrix[x->type.j + 1]) < 0)
+			{
+				ft_swapchar(&matrix[x->type.j], &matrix[x->type.j + 1]);
+				x->type.flag++;
+			}
+			x->type.j++;
+		}
+		x->type.j = 0;
+	}
+	x->type.j = -1;
+	while (matrix[++x->type.j] != NULL)
+		print_basic_color(matrix[x->type.j]);
 }
 
 /*
-** SET_SIGNALS
+** LS_MENU
 ** ---------------------------------------------------------------------------
-** Activa todas las señales para los casos que se usan en el proyecto.
+** Esta funcion es solo posible acceder si alguno de los argumentos son y solo
+** son  -l -r -a -R -t.
+** Esta funcion es de las mas importantes, aqui sabremos que rumbo va a tomar
+** el programa, y todo sera bajo el valor que contengan las flags, si el valor
+** de cada
+** flag es mayor a 1, sera posible entrar a los if que estan acomndados de
+** manera en que la estructura para la impresion sea correcta.
 */
 
-void			set_signals(void)
+void			ls_menu(t_top *x, char *path)
 {
-	signal(SIGHUP, safe_exit);
-	signal(SIGINT, safe_exit);
-	signal(SIGQUIT, safe_exit);
-	signal(SIGILL, safe_exit);
-	signal(SIGTRAP, safe_exit);
-	signal(SIGABRT, safe_exit);
-	signal(SIGEMT, safe_exit);
-	signal(SIGFPE, safe_exit);
-	signal(SIGBUS, safe_exit);
-	signal(SIGSEGV, safe_exit);
-	signal(SIGSYS, safe_exit);
-	signal(SIGPIPE, safe_exit);
-	signal(SIGALRM, safe_exit);
-	signal(SIGTERM, safe_exit);
-	signal(SIGTTIN, safe_exit);
-	signal(SIGTTOU, safe_exit);
-	signal(SIGXCPU, safe_exit);
-	signal(SIGXFSZ, safe_exit);
-	signal(SIGVTALRM, safe_exit);
-	signal(SIGPROF, safe_exit);
-	signal(SIGUSR1, safe_exit);
-	signal(SIGUSR2, safe_exit);
-	signal(SIGTSTP, suspend_term);
-	signal(SIGCONT, continue_term);
-	signal(SIGWINCH, print_screen_se);
+	char		**matrix;
+
+	matrix = NULL;
+	if (security_path(path) == 0)
+		return ;
+	if (x->flag.aa > 0 && x->flag.a == 0)
+		only_dot(x, path);
+	else if (x->flag.f > 0)
+		no_sort(x, path);
+	else if (x->flag.t >= 1)
+		ft_ls_t(x, path);
+	else if (x->flag.rr >= 1)
+		recurtion_mexa(path, x, -1);
+	else if (x->flag.a >= 1 && x->flag.l <= 0)
+		print_basic(x, path);
+	else if (x->flag.r >= 1 && x->flag.l <= 0)
+		print_r(x, path);
+	else
+		print_l(x, path, matrix);
 }
 
 /*
 ** MAIN
 ** ---------------------------------------------------------------------------
-** !!!!!!!!!!!!!
+** Iniciamos en Main donde nos dirigiremos depende del numero de argumentos
+** que introducen.
+** En caso de tener 2 argumentos(tomando en cuanta el nombre del archivo)
+** entraremos a la funcion donde veremos si los argumentos son -l -r -R
+** -a -t o en conjunto -lRar o combinaciones posibles.
+** En caso de que el argumento no tenga "-" el argumento se tomara como
+** referencia a un archivo.
+** En caso de que se introduzca un argumento que comience en "-" y no sea
+** uno dentro de los reconocidos de imprimira el mensaje de illegal option.
 */
 
-int				main(int ac, char **ar)
+int				main(int argc, char **argv)
 {
-	t_var		*x;
+	t_top		*x;
 
-	if (ac < 2)
-		ft_printfcolor("%s\n", "no arguments!!", 31);
-	else
+	x = (t_top*)malloc(sizeof(t_top));
+	flag_zero(x);
+	if (argc >= 1)
 	{
-		x = NULL;
-		x = saved_env(x);
-		get_ar(ac - 1, ar, x);
-		if (!set_stage(x))
-			ft_printfcolor("Vamos mal\n");
-		set_signals();
-		x->ac = ac;
-		init_var(x, ac, ar);
-		safe_t_var(x, 0);
-		print_screen_se(1);
-		read_key(x);
+		if (argc == 1)
+			print_basic(x, ".");
+		else if (argc >= 2)
+		{
+			start_flag(argv, x);
+			if (flag_on(x) && x->flag.file <= 0)
+				ls_menu(x, ".");
+			else if (x->flag.file == 0)
+				ft_printf("ft_ls: illegal option -- %c\nusage: ft_ls"
+					" [-ARaflrt] [file ...]\n", argv[1][1]);
+		}
 	}
-	return (0);
+	ft_memdel((void**)&x);
+	return (1);
 }
